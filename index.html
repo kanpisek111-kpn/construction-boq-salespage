@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบคำนวณราคาค่าก่อสร้าง BOQ & บริหารงวดงาน | โปรแกรมถอดแบบประเมินราคาสำหรับผู้รับเหมามืออาชีพ</title>
+    <meta name="description" content="จบปัญหาทำ BOQ ช้า ตีราคาหลุด ขาดทุนไม่รู้ตัว! โปรแกรมคำนวณต้นทุนค่าก่อสร้าง BOQ และบริหารงวดงานยุคใหม่ ถอดแบบไว รู้กำไรเป๊ะ เบิกเงินตรงงวด ใช้งานง่ายผ่านเว็บบนทุกอุปกรณ์">
+    
+    <!-- Open Graph / SEO -->
+    <meta property="og:title" content="ระบบคำนวณราคาค่าก่อสร้าง BOQ & บริหารงวดงาน | Smart Construction BOQ">
+    <meta property="og:description" content="ถอดแบบเร็วขึ้น 5 เท่า รู้กำไรเป๊ะทุกโปรเจกต์ บริหารงวดเงินไม่มีสะดุด ใช้งานได้ทันทีบนมือถือและคอมพิวเตอร์">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kanpisek111-kpn.github.io/construction-boq-app/">
+    
+    <!-- Google Fonts: Prompt & Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b', // Construction Amber / Yellow
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                            navy: '#0f172a',
+                            steel: '#1e293b',
+                            slate: '#334155',
+                            emerald: '#059669',
+                            cyan: '#0284c7'
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 40px -10px rgba(245, 158, 11, 0.35)',
+                        'glow-emerald': '0 0 35px -8px rgba(16, 185, 129, 0.3)',
+                        'card': '0 20px 45px -15px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(245, 158, 11, 0.12) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .gradient-border {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            backdrop-filter: blur(10px);
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.4), transparent, rgba(59, 130, 246, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.92; transform: scale(1.02); }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-subtle 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Urgency Promo Bar -->
+    <div class="bg-gradient-to-r from-amber-600 via-brand-600 to-amber-700 text-white text-xs sm:text-sm py-2 px-4 font-prompt text-center font-medium shadow-sm relative z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-amber-900/60 text-amber-200 border border-amber-400/40">🔥 โปรเปิดตัวพิเศษ</span>
+            <span>ลดพิเศษ 50% สำหรับผู้รับเหมาและวิศวกร 50 ท่านแรกประจำเดือนนี้</span>
+            <span class="font-bold underline cursor-pointer hover:text-amber-100 transition" onclick="scrollToPricing()">ดูราคา & สมัครเลย &rarr;</span>
+        </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all duration-300 shadow-sm" id="mainHeader">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo & Title -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-amber-500/30 group-hover:scale-105 transition duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-prompt font-extrabold text-lg sm:text-xl text-slate-900 leading-tight">
+                            BOQ Pro <span class="text-amber-600 font-semibold text-base sm:text-lg">ระบบคำนวณงานก่อสร้าง</span>
+                        </div>
+                        <div class="text-xs text-slate-500 hidden sm:block">Bill of Quantities & Project Milestone Platform</div>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center gap-8 font-prompt text-sm font-medium text-slate-600">
+                    <a href="#problems" class="hover:text-amber-600 transition">ปัญหาที่พบบ่อย</a>
+                    <a href="#features" class="hover:text-amber-600 transition">ฟีเจอร์เด่น</a>
+                    <a href="#demo" class="hover:text-amber-600 transition">ทดลองคำนวณ</a>
+                    <a href="#benefits" class="hover:text-amber-600 transition">ทำไมต้องใช้?</a>
+                    <a href="#pricing" class="hover:text-amber-600 transition">ราคาแพ็กเกจ</a>
+                    <a href="#faq" class="hover:text-amber-600 transition">คำถามพบบ่อย</a>
+                </nav>
+
+                <!-- Action CTA -->
+                <div class="flex items-center gap-3">
+                    <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-prompt font-semibold px-4 sm:px-6 py-2.5 rounded-xl shadow-md shadow-amber-500/25 hover:shadow-lg hover:shadow-amber-500/35 transition duration-300 transform hover:-translate-y-0.5">
+                        <span>เข้าสู่ระบบโปรแกรม</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white">
+        <!-- Background Glows -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] pointer-events-none opacity-30">
+            <div class="absolute top-10 left-1/4 w-96 h-96 bg-amber-500/40 rounded-full blur-3xl"></div>
+            <div class="absolute top-20 right-1/4 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl"></div>
+        </div>
+        <div class="absolute inset-0 bg-grid-pattern opacity-15 pointer-events-none"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-4xl mx-auto space-y-6">
+                <!-- Trust Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/90 border border-slate-700 text-amber-400 text-xs sm:text-sm font-prompt font-medium shadow-inner">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                    </span>
+                    นวัตกรรมใหม่สำหรับผู้รับเหมาไทย • ใช้งานบนเว็บบราวเซอร์ได้ 100%
+                </div>
+
+                <!-- Main Headline -->
+                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-prompt tracking-tight leading-tight sm:leading-tight">
+                    จบปัญหาทำ BOQ ช้า ตีราคาหลุด<br>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500">
+                        ระบบคำนวณราคาค่าก่อสร้าง & บริหารงวดงาน
+                    </span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="text-base sm:text-xl text-slate-300 font-sarabun max-w-3xl mx-auto leading-relaxed">
+                    ถอดแบบรวดเร็ว แม่นยำ แยกหมวดหมู่งานชัดเจน รู้กำไรสุทธิทุกโปรเจกต์ 
+                    พร้อมระบบกระจายงวดงานและออกเอกสารใบเสนอราคามาตรฐาน หมดกังวลเรื่องงบบานปลายหรือเบิกเงินสะดุด
+                </p>
+
+                <!-- Value Highlights Pills -->
+                <div class="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-slate-300">
+                    <div class="flex items-center gap-1.5 bg-slate-800/70 border border-slate-700/60 px-3 py-1.5 rounded-lg">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span>ไม่ต้องลงโปรแกรม</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-slate-800/70 border border-slate-700/60 px-3 py-1.5 rounded-lg">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span>เปิดได้ทั้งมือถือ & คอม</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-slate-800/70 border border-slate-700/60 px-3 py-1.5 rounded-lg">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span>สูตรคำนวณมาตรฐานวิศวกรรม</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 bg-slate-800/70 border border-slate-700/60 px-3 py-1.5 rounded-lg">
+                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span>ส่งออกเอกสารได้ทันที</span>
+                    </div>
+                </div>
+
+                <!-- Main Call to Actions -->
+                <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer"
+                       class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-prompt font-bold text-lg px-8 py-4 rounded-xl shadow-glow hover:shadow-amber-500/50 transition duration-300 transform hover:-translate-y-1">
+                        <svg class="w-6 h-6 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>เปิดทดลองใช้งานโปรแกรมฟรี</span>
+                    </a>
+
+                    <a href="#demo"
+                       class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-white font-prompt font-medium text-base px-6 py-4 rounded-xl transition duration-300">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <span>ทดลองคำนวณงบหน้าเว็บ</span>
+                    </a>
+                </div>
+
+                <div class="text-xs text-slate-400 pt-1">
+                    * ไม่ต้องผูกบัตรเครดิต • เข้าใช้งานผ่านเว็บบราวเซอร์ได้ทันที
+                </div>
+            </div>
+
+            <!-- Hero Mockup & Dashboard Showcase -->
+            <div class="mt-14 max-w-5xl mx-auto">
+                <div class="relative rounded-2xl p-2 sm:p-4 bg-slate-800/60 border border-slate-700/80 shadow-2xl backdrop-blur-xl">
+                    <!-- Top Browser Window Bar -->
+                    <div class="flex items-center justify-between px-3 py-2 border-b border-slate-700/70 mb-3 text-xs text-slate-400">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                            <span class="ml-2 font-mono text-[11px] text-slate-400 hidden sm:inline">kanpisek111-kpn.github.io/construction-boq-app/</span>
+                        </div>
+                        <div class="flex items-center gap-2 font-prompt text-[11px]">
+                            <span class="inline-flex items-center gap-1 text-emerald-400">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                ระบบพร้อมใช้งาน
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- App Interactive Simulation / Visual UI -->
+                    <div class="rounded-xl bg-slate-900 border border-slate-700/70 overflow-hidden text-slate-100 p-4 sm:p-6">
+                        <!-- Header Stats inside Mockup -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                            <div class="bg-slate-800/80 p-3 sm:p-4 rounded-xl border border-slate-700/70">
+                                <span class="text-xs text-slate-400 block font-prompt">มูลค่างานรวม (Total BOQ)</span>
+                                <span class="text-lg sm:text-2xl font-bold font-prompt text-amber-400">฿3,850,000</span>
+                                <span class="text-[11px] text-emerald-400 block mt-0.5">รวมภาษีและกำไรแล้ว</span>
+                            </div>
+                            <div class="bg-slate-800/80 p-3 sm:p-4 rounded-xl border border-slate-700/70">
+                                <span class="text-xs text-slate-400 block font-prompt">ต้นทุนค่าวัสดุ (Materials)</span>
+                                <span class="text-lg sm:text-2xl font-bold font-prompt text-blue-400">฿2,150,000</span>
+                                <span class="text-[11px] text-slate-400 block mt-0.5">55.8% ของต้นทุน</span>
+                            </div>
+                            <div class="bg-slate-800/80 p-3 sm:p-4 rounded-xl border border-slate-700/70">
+                                <span class="text-xs text-slate-400 block font-prompt">ต้นทุนค่าแรง (Labor Cost)</span>
+                                <span class="text-lg sm:text-2xl font-bold font-prompt text-cyan-400">฿980,000</span>
+                                <span class="text-[11px] text-slate-400 block mt-0.5">25.5% ของต้นทุน</span>
+                            </div>
+                            <div class="bg-slate-800/80 p-3 sm:p-4 rounded-xl border border-slate-700/70 bg-gradient-to-br from-emerald-950/40 to-slate-800">
+                                <span class="text-xs text-emerald-300 block font-prompt">กำไรสุทธิคาดการณ์</span>
+                                <span class="text-lg sm:text-2xl font-bold font-prompt text-emerald-400">฿720,000</span>
+                                <span class="text-[11px] text-emerald-300 block mt-0.5">Margin 18.7% ปลอดภัย</span>
+                            </div>
+                        </div>
+
+                        <!-- Sample BOQ Table Preview -->
+                        <div class="overflow-x-auto rounded-lg border border-slate-700/60 bg-slate-950/60">
+                            <table class="w-full text-left text-xs sm:text-sm">
+                                <thead class="bg-slate-800/90 text-slate-300 uppercase font-prompt text-[11px]">
+                                    <tr>
+                                        <th class="py-2.5 px-3">หมวดหมู่งาน</th>
+                                        <th class="py-2.5 px-3">ปริมาณ</th>
+                                        <th class="py-2.5 px-3">ค่าวัสดุ (บาท)</th>
+                                        <th class="py-2.5 px-3">ค่าแรง (บาท)</th>
+                                        <th class="py-2.5 px-3 text-right">รวมเงิน (บาท)</th>
+                                        <th class="py-2.5 px-3 text-center">งวดเบิกเงิน</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-800 font-sarabun text-slate-300">
+                                    <tr class="hover:bg-slate-800/40 transition">
+                                        <td class="py-2.5 px-3 font-medium text-white flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-amber-500"></span> 1. งานโครงสร้างคอนกรีต & ฐานราก
+                                        </td>
+                                        <td class="py-2.5 px-3">180 ตร.ม.</td>
+                                        <td class="py-2.5 px-3">540,000</td>
+                                        <td class="py-2.5 px-3">210,000</td>
+                                        <td class="py-2.5 px-3 font-semibold text-right text-amber-300">750,000</td>
+                                        <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 text-[11px]">งวด 1 & 2</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/40 transition">
+                                        <td class="py-2.5 px-3 font-medium text-white flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-amber-500"></span> 2. งานสถาปัตยกรรม (ก่อฉาบ/พื้น/ผนัง)
+                                        </td>
+                                        <td class="py-2.5 px-3">1 เหมา</td>
+                                        <td class="py-2.5 px-3">820,000</td>
+                                        <td class="py-2.5 px-3">410,000</td>
+                                        <td class="py-2.5 px-3 font-semibold text-right text-amber-300">1,230,000</td>
+                                        <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded bg-amber-900/60 text-amber-300 text-[11px]">งวด 3 & 4</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/40 transition">
+                                        <td class="py-2.5 px-3 font-medium text-white flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-amber-500"></span> 3. งานระบบไฟฟ้าและสุขาภิบาล
+                                        </td>
+                                        <td class="py-2.5 px-3">1 ระบบ</td>
+                                        <td class="py-2.5 px-3">490,000</td>
+                                        <td class="py-2.5 px-3">260,000</td>
+                                        <td class="py-2.5 px-3 font-semibold text-right text-amber-300">750,000</td>
+                                        <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 text-[11px]">งวด 4 & 5</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/40 transition">
+                                        <td class="py-2.5 px-3 font-medium text-white flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 4. งวดงานส่งมอบ & ประกันผลงาน
+                                        </td>
+                                        <td class="py-2.5 px-3">100%</td>
+                                        <td class="py-2.5 px-3">-</td>
+                                        <td class="py-2.5 px-3">-</td>
+                                        <td class="py-2.5 px-3 font-semibold text-right text-emerald-400">400,000</td>
+                                        <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded bg-emerald-900/60 text-emerald-300 text-[11px]">งวดสุดท้าย</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Bottom Interactive Hint -->
+                        <div class="mt-4 pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+                            <div class="flex items-center gap-2">
+                                <span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span>
+                                <span>สามารถเพิ่ม-ลด รายการวัสดุ ค่าแรง กำไร และสูตรคำนวณตามต้องการได้อย่างอิสระ</span>
+                            </div>
+                            <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" class="text-amber-400 hover:text-amber-300 font-prompt font-semibold flex items-center gap-1">
+                                ทดลองใช้งานจริงเต็มรูปแบบ &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST STATS COUNTER -->
+    <section class="bg-white border-y border-slate-200 py-10 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="p-3">
+                    <div class="text-3xl sm:text-4xl font-extrabold font-prompt text-amber-600">85%</div>
+                    <div class="text-xs sm:text-sm text-slate-600 font-prompt mt-1">ประหยัดเวลาทำ BOQ & เสนอราคา</div>
+                </div>
+                <div class="p-3">
+                    <div class="text-3xl sm:text-4xl font-extrabold font-prompt text-slate-900">0%</div>
+                    <div class="text-xs sm:text-sm text-slate-600 font-prompt mt-1">หมดปัญหาลืมคิดค่าแรง-ค่าวัสดุ</div>
+                </div>
+                <div class="p-3">
+                    <div class="text-3xl sm:text-4xl font-extrabold font-prompt text-emerald-600">100%</div>
+                    <div class="text-xs sm:text-sm text-slate-600 font-prompt mt-1">บริหารเงินหมุนเวียนตรงงวดงาน</div>
+                </div>
+                <div class="p-3">
+                    <div class="text-3xl sm:text-4xl font-extrabold font-prompt text-blue-600">Cloud Web</div>
+                    <div class="text-xs sm:text-sm text-slate-600 font-prompt mt-1">เปิดใช้งานได้ทันที ทุกที่ ทุกเวลา</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAIN POINTS SECTION -->
+    <section id="problems" class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs sm:text-sm font-bold font-prompt text-red-600 uppercase tracking-wider bg-red-100 px-3 py-1 rounded-full">คุณกำลังเจอปัญหานี้อยู่หรือไม่?</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold font-prompt text-slate-900 mt-4 leading-snug">
+                    ทำไมผู้รับเหมาและช่างส่วนใหญ่<br><span class="text-red-600">เหนื่อยฟรี หรือ ขาดทุนแบบไม่รู้ตัว?</span>
+                </h2>
+                <p class="text-slate-600 mt-3 text-base sm:text-lg">
+                    การตีราคาแบบกะประมาณ หรือใช้ Excel สับสน อาจทำให้คุณสูญเสียเงินกำไรเป็นหลักแสนโดยไม่รู้ตัว
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Pain Card 1 -->
+                <div class="bg-white rounded-2xl p-7 border border-red-100 shadow-card hover:border-red-300 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-lg text-slate-900 mb-2">1. คำนวณใน Excel สูตรเพี้ยน ไฟล์หาย</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        สูตรคำนวณที่ทำไว้หลายชีท ลิงก์เสีย ลืมแก้ราคาวัสดุใหม่ พอแก้ตัวเลขหนึ่งกระทบตัวเลขอื่นจนคลาดเคลื่อน ทำงานเหนื่อยฟรีแต่ได้ราคาผิด
+                    </p>
+                </div>
+
+                <!-- Pain Card 2 -->
+                <div class="bg-white rounded-2xl p-7 border border-red-100 shadow-card hover:border-red-300 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-lg text-slate-900 mb-2">2. ตีราคาหลุด ต่ำไปก็ขาดทุน สูงไปก็ชวดงาน</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        ไม่ได้แยกราคาค่าของ ค่าแรง ค่าดำเนินการ (Overhead) อย่างละเอียด เมื่อเจองานจริงต้นทุนบานปลาย จากที่คิดว่าได้กำไรกลับกลายเป็นควักเนื้อตัวเอง
+                    </p>
+                </div>
+
+                <!-- Pain Card 3 -->
+                <div class="bg-white rounded-2xl p-7 border border-red-100 shadow-card hover:border-red-300 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-lg text-slate-900 mb-2">3. แบ่งงวดเงินผิด เบิกเงินไม่ได้ งานสะดุด</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        วางแผนงวดงานไม่สัมพันธ์กับต้นทุนจริง ทำงานไปถึงกลางทางเงินหมด หมุนเงินไม่ทัน เกิดปัญหากับช่างและเจ้าของบ้าน ทะเลาะจนงานสะดุด
+                    </p>
+                </div>
+            </div>
+
+            <!-- Comparison Table: Old vs New -->
+            <div class="mt-14 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <h3 class="font-prompt font-bold text-xl text-slate-900 text-center mb-6">
+                    เปรียบเทียบชัดเจน: วิธีเดิม vs ใช้ระบบคำนวณ BOQ & บริหารงวดงาน
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-xs sm:text-sm font-prompt">
+                                <th class="p-3 text-slate-500 w-1/3">หัวข้อการเปรียบเทียบ</th>
+                                <th class="p-3 text-red-600 bg-red-50/50 w-1/3">วิธีเดิม (Excel / จดสมุด)</th>
+                                <th class="p-3 text-emerald-700 bg-emerald-50 w-1/3">ใช้ระบบคำนวณ BOQ อัจฉริยะ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-sarabun text-slate-700">
+                            <tr>
+                                <td class="p-3 font-medium">ความเร็วในการถอดแบบ</td>
+                                <td class="p-3 text-red-600 bg-red-50/30">ใช้เวลา 2 - 5 วันต่อโปรเจกต์</td>
+                                <td class="p-3 text-emerald-700 bg-emerald-50/70 font-semibold">เสร็จได้ใน 1 - 2 ชั่วโมง</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">ความแม่นยำของต้นทุน</td>
+                                <td class="p-3 text-red-600 bg-red-50/30">เสี่ยงสูตรพัง ตกหล่นรายการสำคัญ</td>
+                                <td class="p-3 text-emerald-700 bg-emerald-50/70 font-semibold">แยกหมวดหมู่อัตโนมัติ ครบถ้วน 100%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">การวางแผนงวดงาน (Milestone)</td>
+                                <td class="p-3 text-red-600 bg-red-50/30">กะประมาณด้วยความรู้สึก เบิกเงินสะดุด</td>
+                                <td class="p-3 text-emerald-700 bg-emerald-50/70 font-semibold">ผูกงวดงานกับต้นทุนจริง เงินหมุนลื่นไหล</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">ความน่าเชื่อถือกับผู้ว่าจ้าง</td>
+                                <td class="p-3 text-red-600 bg-red-50/30">ไฟล์ไม่เรียบร้อย ดูไม่เป็นมืออาชีพ</td>
+                                <td class="p-3 text-emerald-700 bg-emerald-50/70 font-semibold">เอกสารมาตรฐาน มีโครงสร้างชัดเจน ลูกค้ามั่นใจ</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">การเข้าถึงข้อมูล</td>
+                                <td class="p-3 text-red-600 bg-red-50/30">ติดอยู่แต่ในคอมพิวเตอร์ที่ออฟฟิศ</td>
+                                <td class="p-3 text-emerald-700 bg-emerald-50/70 font-semibold">เปิดดูและแก้ได้จากหน้างานผ่านมือถือทันที</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE FEATURES SECTION -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs sm:text-sm font-bold font-prompt text-amber-600 uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full">ฟังก์ชันครบ จบในที่เดียว</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold font-prompt text-slate-900 mt-4 leading-snug">
+                    เครื่องมือที่พัฒนามาเพื่อ<br><span class="text-amber-600">ผู้รับเหมาก่อสร้างยุคดิจิทัลโดยเฉพาะ</span>
+                </h2>
+                <p class="text-slate-600 mt-3 text-base sm:text-lg">
+                    ออกแบบให้ใช้งานง่ายที่สุด แม้ไม่เก่งคอมพิวเตอร์ก็สามารถสร้าง BOQ ระดับมืออาชีพได้ทันที
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-card hover:border-amber-400 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500 text-white flex items-center justify-center mb-5 shadow-md shadow-amber-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-xl text-slate-900 mb-2">คำนวณ BOQ แยกหมวดหมู่อัตโนมัติ</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        จัดหมวดหมู่งานอย่างเป็นระบบ ทั้งงานเตรียมการ, โครงสร้าง, สถาปัตย์, ไฟฟ้า, ประปา-สุขาภิบาล แยกค่าวัสดุและค่าแรงชัดเจนตามมาตรฐานงานก่อสร้าง
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-card hover:border-amber-400 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center mb-5 shadow-md shadow-blue-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-xl text-slate-900 mb-2">ระบบบริหารและแบ่งงวดงานอัจฉริยะ</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        วางแผนการเบิกเงินค่างวดอย่างแม่นยำ กำหนด % ค่างวดผูกกับความคืบหน้าของงานจริง ช่วยให้กระแสเงินสด (Cash Flow) หมุนเวียนคล่องตัว ไม่สะดุด
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-card hover:border-amber-400 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-5 shadow-md shadow-emerald-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-xl text-slate-900 mb-2">คำนวณกำไร & ค่าดำเนินการ Real-time</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        ปรับ % กำไรที่ต้องการ (Profit Margin), ค่าดำเนินงาน (Overhead), และภาษีมูลค่าเพิ่ม (VAT) ได้ทันที เห็นผลกำไรสุทธิก่อนเซ็นสัญญา ปิดประตูขาดทุน
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-card hover:border-amber-400 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-purple-600 text-white flex items-center justify-center mb-5 shadow-md shadow-purple-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-xl text-slate-900 mb-2">ฐานข้อมูลวัสดุ & อัปเดตราคาได้เอง</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        มีหมวดรายการวัสดุพื้นฐานพร้อมหน่วยนับให้เลือกใช้ สามารถแก้ไขราคาต่อหน่วยตามร้านวัสดุก่อสร้างในพื้นที่ของคุณได้อย่างอิสระ
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-card hover:border-amber-400 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-rose-600 text-white flex items-center justify-center mb-5 shadow-md shadow-rose-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-xl text-slate-900 mb-2">ออกรายงานส่งลูกค้า สวยงาม พร้อมพิมพ์</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        สร้างใบเสนอราคาและรายงานแจกแจง BOQ ส่งให้เจ้าของบ้านหรือธนาคารได้ทันที ดีไซน์เอกสารเรียบหรู สร้างความน่าเชื่อถือ ปิดการขายง่ายขึ้น
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="p-7 rounded-2xl bg-slate-50 border border-slate-200/80 hover:shadow-card hover:border-amber-400 transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-600 text-white flex items-center justify-center mb-5 shadow-md shadow-cyan-500/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-xl text-slate-900 mb-2">รองรับทุกอุปกรณ์ เปิดผ่านเว็บได้ทันที</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        ไม่เปลืองพื้นที่เครื่อง ไม่ติดปัญหา Windows/Mac เปิดผ่าน Chrome, Safari บนมือถือ แท็บเล็ต หรือโน้ตบุ๊กขณะอยู่หน้างานได้ทันที
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE BOQ ESTIMATOR DEMO WIDGET -->
+    <section id="demo" class="py-20 bg-gradient-to-b from-slate-900 to-slate-950 text-white relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-xs sm:text-sm font-bold font-prompt text-amber-400 uppercase tracking-wider bg-amber-500/10 border border-amber-400/30 px-3 py-1 rounded-full">
+                    ⚡ ทดลองคำนวณงบเบื้องต้นแบบจำลอง
+                </span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold font-prompt text-white mt-4">
+                    ทดสอบคำนวณงบก่อสร้าง & ค่างวดงาน
+                </h2>
+                <p class="text-slate-300 mt-2 text-sm sm:text-base">
+                    ลองปรับพื้นที่ใช้สอยและระดับสเปกวัสดุ เพื่อดูการคำนวณและกระจายงวดงานจำลองได้ทันที
+                </p>
+            </div>
+
+            <!-- Demo Interactive Box -->
+            <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 sm:p-8 shadow-2xl backdrop-blur-md">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <!-- Controls -->
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="font-prompt text-sm font-semibold text-slate-200">พื้นที่ใช้สอยตัวอย่าง (ตร.ม.)</label>
+                                <span id="areaValueDisplay" class="font-prompt text-amber-400 font-bold text-lg">150 ตร.ม.</span>
+                            </div>
+                            <input type="range" id="areaSlider" min="50" max="600" value="150" step="10" 
+                                   class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500" 
+                                   oninput="calculateDemoEstimate()">
+                            <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-prompt">
+                                <span>50 ตร.ม. (บ้านเล็ก)</span>
+                                <span>300 ตร.ม.</span>
+                                <span>600 ตร.ม. (คฤหาสน์)</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="font-prompt text-sm font-semibold text-slate-200 block mb-2">เกรดสเปกวัสดุก่อสร้าง</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" onclick="setGrade('economy')" id="btnGradeEconomy" 
+                                        class="py-2.5 px-3 rounded-xl border border-slate-600 bg-slate-700/60 text-xs font-prompt text-slate-300 hover:border-amber-400 transition text-center">
+                                    ประหยัดคุ้มค่า<br><span class="text-[10px] text-slate-400">~12,000/ตร.ม.</span>
+                                </button>
+                                <button type="button" onclick="setGrade('standard')" id="btnGradeStandard" 
+                                        class="py-2.5 px-3 rounded-xl border-2 border-amber-500 bg-amber-500/20 text-xs font-prompt text-amber-300 transition text-center font-bold">
+                                    มาตรฐานนิยม<br><span class="text-[10px] text-amber-200">~15,500/ตร.ม.</span>
+                                </button>
+                                <button type="button" onclick="setGrade('premium')" id="btnGradePremium" 
+                                        class="py-2.5 px-3 rounded-xl border border-slate-600 bg-slate-700/60 text-xs font-prompt text-slate-300 hover:border-amber-400 transition text-center">
+                                    พรีเมียมหรูหรา<br><span class="text-[10px] text-slate-400">~20,000/ตร.ม.</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="font-prompt text-sm font-semibold text-slate-200">อัตรากำไร & ค่าดำเนินการ (Overhead)</label>
+                                <span id="marginDisplay" class="font-prompt text-emerald-400 font-bold">18%</span>
+                            </div>
+                            <input type="range" id="marginSlider" min="10" max="30" value="18" step="1" 
+                                   class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                                   oninput="calculateDemoEstimate()">
+                        </div>
+                    </div>
+
+                    <!-- Output Summary -->
+                    <div class="bg-slate-900/90 rounded-xl p-5 sm:p-6 border border-slate-700/80 space-y-4">
+                        <div class="text-center pb-4 border-b border-slate-800">
+                            <span class="text-xs text-slate-400 font-prompt">ประมาณการราคาค่าก่อสร้างรวม</span>
+                            <div id="demoTotalCost" class="text-3xl sm:text-4xl font-extrabold font-prompt text-amber-400 mt-1">฿2,325,000</div>
+                            <div class="text-xs text-emerald-400 font-prompt mt-1">
+                                กำไรคาดการณ์โดยประมาณ: <span id="demoProfitAmount" class="font-bold">฿418,500</span>
+                            </div>
+                        </div>
+
+                        <!-- 5 Milestone Payments Schedule -->
+                        <div>
+                            <div class="text-xs font-prompt font-semibold text-slate-300 mb-2 flex items-center justify-between">
+                                <span>การกระจายงวดงาน 5 งวด (คำนวณอัตโนมัติ)</span>
+                                <span class="text-[10px] text-amber-400">เบิกตามเนื้องาน</span>
+                            </div>
+                            <div class="space-y-2 text-xs font-sarabun text-slate-300" id="milestonesList">
+                                <div class="flex justify-between items-center bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
+                                    <span>งวดที่ 1 (15%): เซ็นสัญญา & ตอกเสาเข็ม</span>
+                                    <span class="font-prompt font-semibold text-amber-300" id="m1">฿348,750</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
+                                    <span>งวดที่ 2 (25%): โครงสร้างชั้น 1-2 & คานคอดิน</span>
+                                    <span class="font-prompt font-semibold text-amber-300" id="m2">฿581,250</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
+                                    <span>งวดที่ 3 (25%): หลังคา ก่อผนัง ท่อร้อยสายไฟ</span>
+                                    <span class="font-prompt font-semibold text-amber-300" id="m3">฿581,250</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
+                                    <span>งวดที่ 4 (25%): ปูกระเบื้อง ทาสี ฝ้าเพดาน</span>
+                                    <span class="font-prompt font-semibold text-amber-300" id="m4">฿581,250</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/50 bg-emerald-950/40">
+                                    <span>งวดที่ 5 (10%): ติดตั้งสุขภัณฑ์ ตรวจรับมอบ</span>
+                                    <span class="font-prompt font-semibold text-emerald-400" id="m5">฿232,500</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer" 
+                               class="w-full inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-prompt font-bold text-sm py-3 px-4 rounded-xl transition duration-300 shadow-md">
+                                <span>เข้าใช้ระบบจริงเพื่อถอดแบบละเอียด &rarr;</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHO IS THIS FOR SECTION -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs sm:text-sm font-bold font-prompt text-blue-600 uppercase tracking-wider bg-blue-100 px-3 py-1 rounded-full">ออกแบบเพื่อคนในวงการก่อสร้าง</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold font-prompt text-slate-900 mt-4 leading-snug">
+                    ระบบนี้เหมาะกับใครบ้าง?
+                </h2>
+                <p class="text-slate-600 mt-3 text-base sm:text-lg">
+                    ไม่ว่าคุณจะเป็นผู้รับเหมาอิสระ หรือบริษัทรับเหมาก่อสร้าง ระบบนี้จะช่วยยกระดับการทำงานของคุณ
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-lg text-slate-900 mb-2">ผู้รับเหมาสร้างบ้าน</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        ถอดแบบสร้างบ้านเดี่ยว ทาวน์โฮม อาคารพาณิชย์ ได้แม่นยำทุกขั้นตอน ควบคุมงบไม่ให้บานปลาย
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-lg text-slate-900 mb-2">ช่างรีโนเวท & ต่อเติม</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        งานต่อเติมครัว หลังคา ปูกระเบื้อง ทาสี คิดราคาได้รวดเร็ว ออกใบเสนอราคาปิดงานได้ทันใจ
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-lg text-slate-900 mb-2">วิศวกร & สถาปนิก</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        ทำราคากลาง ตรวจสอบ BOQ ของผู้รับเหมา และจัดสรรงวดงานส่งให้ลูกค้าหรือสถาบันการเงิน
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                    <div class="w-14 h-14 mx-auto rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                    <h3 class="font-prompt font-bold text-lg text-slate-900 mb-2">เจ้าของบ้าน & โครงการ</h3>
+                    <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                        ใช้คำนวณงบประมาณก่อสร้างล่วงหน้าเพื่อเตรียมวงเงินกู้ และตรวจเช็กความสมเหตุสมผลของราคา
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS / SOCIAL PROOF -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs sm:text-sm font-bold font-prompt text-emerald-600 uppercase tracking-wider bg-emerald-100 px-3 py-1 rounded-full">เสียงตอบรับจริง</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold font-prompt text-slate-900 mt-4 leading-snug">
+                    ผู้รับเหมาและวิศวกรยืนยัน<br><span class="text-emerald-600">ช่วยให้งานง่ายขึ้นและมีกำไรชัดเจน</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 mb-3">
+                            ★★★★★
+                        </div>
+                        <p class="text-slate-700 text-sm leading-relaxed mb-4">
+                            "แต่ก่อนทำ BOQ ใน Excel ดึกดื่นทุกคืนเพื่อส่งงานลูกค้า บางทีก็อปสูตรผิดราคาหลุดขาดทุน พอมาใช้โปรแกรมนี้ชีวิตเปลี่ยนเลยครับ ถอดแบบเสร็จภายในชั่วโมงเดียว แบ่งงวดเงินส่งลูกค้าดูโปรมาก"
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200">
+                        <div class="w-10 h-10 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center font-prompt text-sm">
+                            ช.ศ
+                        </div>
+                        <div>
+                            <div class="font-prompt font-bold text-sm text-slate-900">ช่างศักดิ์ชัย</div>
+                            <div class="text-xs text-slate-500">ผู้รับเหมาก่อสร้างบ้าน ชลบุรี</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 mb-3">
+                            ★★★★★
+                        </div>
+                        <p class="text-slate-700 text-sm leading-relaxed mb-4">
+                            "จุดที่ชอบที่สุดคือระบบบริหารงวดงานครับ ทำให้เรารู้เลยว่างวดไหนต้องเบิกเท่าไหร่ถึงจะพอกับค่าของและค่าช่างในงวดนั้น เงินไม่ตึง ไม่ต้องเอาเงินตัวเองไปสำรองจ่ายก่อนเหมือนเมื่อก่อน"
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center font-prompt text-sm">
+                            ว.ธ
+                        </div>
+                        <div>
+                            <div class="font-prompt font-bold text-sm text-slate-900">คุณธนกร (วิศวกรโยธา)</div>
+                            <div class="text-xs text-slate-500">ผู้จัดการโครงการ บริษัท ทีเค คอนสตรัคชั่น</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-slate-50 p-7 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 mb-3">
+                            ★★★★★
+                        </div>
+                        <p class="text-slate-700 text-sm leading-relaxed mb-4">
+                            "ชอบตรงที่เปิดจากมือถือหน้างานได้เลยครับ เวลานัดคุยกับเจ้าของบ้าน สามารถปรับสเปกวัสดุแล้วตัวเลขราคากับงวดงานคำนวณใหม่ให้เห็นจะจะ ลูกค้าตัดสินใจเซ็นสัญญาเร็วขึ้นมาก"
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3 pt-4 border-t border-slate-200">
+                        <div class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center font-prompt text-sm">
+                            ช.ว
+                        </div>
+                        <div>
+                            <div class="font-prompt font-bold text-sm text-slate-900">ช่างวิทย์ รีโนเวท</div>
+                            <div class="text-xs text-slate-500">ผู้รับเหมางานรีโนเวทและตกแต่ง กรุงเทพฯ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING PACKAGES SECTION -->
+    <section id="pricing" class="py-20 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <!-- Countdown Banner -->
+                <div class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 px-4 py-1.5 rounded-full text-amber-300 text-xs sm:text-sm font-prompt mb-4">
+                    <span>⏰ ข้อเสนอโปรโมชั่นพิเศษสิ้นสุดใน:</span>
+                    <span id="countdownTimer" class="font-bold font-mono text-white">03 วัน 08 ชม. 45 นาที</span>
+                </div>
+
+                <h2 class="text-3xl sm:text-5xl font-extrabold font-prompt text-white leading-tight">
+                    ลงทุนหลักร้อย ปกป้องกำไรหลักล้าน
+                </h2>
+                <p class="text-slate-300 mt-3 text-base sm:text-lg">
+                    เลือกแพ็กเกจที่เหมาะกับคุณ ใช้งานได้เต็มรูปแบบ ไม่มีเงื่อนไขซ่อนเร้น
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+                <!-- Plan 1: Free Trial / Starter -->
+                <div class="bg-slate-800/90 rounded-2xl p-8 border border-slate-700 flex flex-col justify-between">
+                    <div>
+                        <div class="font-prompt font-bold text-lg text-slate-300">ทดลองใช้งานฟรี</div>
+                        <div class="text-xs text-slate-400 mt-1">เหมาะสำหรับทดสอบระบบและผู้เริ่มต้น</div>
+                        <div class="my-6">
+                            <span class="text-4xl font-extrabold font-prompt text-white">฿0</span>
+                            <span class="text-slate-400 text-sm"> / ทดลองใช้</span>
+                        </div>
+                        <ul class="space-y-3 text-sm font-sarabun text-slate-300">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                <span>เข้าใช้งานคำนวณ BOQ ออนไลน์</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                <span>คำนวณงวดงานมาตรฐาน 5 งวด</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                <span>เปิดใช้งานได้ทั้งมือถือและคอมพิวเตอร์</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8">
+                        <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank"
+                           class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl border border-slate-600 bg-slate-700/80 hover:bg-slate-700 text-white font-prompt font-semibold text-sm transition">
+                            เริ่มใช้งานฟรีทันที
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Plan 2: Pro Lifetime (Best Value Highlight) -->
+                <div class="bg-gradient-to-b from-amber-950/60 via-slate-800 to-slate-800 rounded-2xl p-8 border-2 border-amber-500 relative shadow-glow flex flex-col justify-between transform lg:-translate-y-2">
+                    <!-- Popular Badge -->
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-prompt font-bold text-xs uppercase px-4 py-1.5 rounded-full shadow-md">
+                        🔥 แนะนำยอดนิยม • จ่ายครั้งเดียวจบ
+                    </div>
+
+                    <div>
+                        <div class="font-prompt font-bold text-xl text-amber-400">Pro Lifetime (ตลอดชีพ)</div>
+                        <div class="text-xs text-amber-200/80 mt-1">ปลดล็อกฟังก์ชันเต็มรูปแบบ ไม่ต้องจ่ายรายเดือน</div>
+                        <div class="my-6">
+                            <span class="text-sm line-through text-slate-400">ปกติ 2,990.-</span>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-4xl sm:text-5xl font-extrabold font-prompt text-white">฿990</span>
+                                <span class="text-amber-400 text-sm font-prompt">จ่ายครั้งเดียวใช้ได้ตลอดชีพ</span>
+                            </div>
+                        </div>
+                        <ul class="space-y-3.5 text-sm font-sarabun text-slate-200">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span class="font-semibold text-white">ใช้งานฟังก์ชันคำนวณ BOQ ไม่จำกัดโครงการ</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>ปรับแต่งฐานราคาวัสดุ & ค่าแรงได้เอง</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>ระบบออกเอกสารใบเสนอราคา (Quotation/PDF)</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>อัปเดตฟีเจอร์ใหม่ฟรีตลอดอายุการใช้งาน</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                <span>บริการช่วยเหลือให้คำปรึกษาการใช้งาน</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8">
+                        <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank"
+                           class="w-full inline-flex items-center justify-center py-4 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-prompt font-bold text-base transition shadow-lg shadow-amber-500/30">
+                            สั่งซื้อสิทธิ์ Pro & เข้าใช้งานทันที
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Plan 3: Enterprise / Team -->
+                <div class="bg-slate-800/90 rounded-2xl p-8 border border-slate-700 flex flex-col justify-between">
+                    <div>
+                        <div class="font-prompt font-bold text-lg text-slate-300">ทีม & องค์กร (Enterprise)</div>
+                        <div class="text-xs text-slate-400 mt-1">สำหรับบริษัทรับเหมาขนาดกลางและใหญ่</div>
+                        <div class="my-6">
+                            <span class="text-sm line-through text-slate-400">ปกติ 5,900.-</span>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-4xl font-extrabold font-prompt text-white">฿2,490</span>
+                                <span class="text-slate-400 text-sm"> / ตลอดชีพ</span>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 text-sm font-sarabun text-slate-300">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                <span>รวมทุกอย่างในแพ็กเกจ Pro</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                <span>ใส่โลโก้และข้อมูลบริษัทบนหัวเอกสาร</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                <span>รองรับการใช้งานหลายบัญชีในทีม</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                <span>Support พิเศษแบบ Priority ส่วนตัว</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-8">
+                        <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank"
+                           class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl border border-slate-600 bg-slate-700/80 hover:bg-slate-700 text-white font-prompt font-semibold text-sm transition">
+                            ติดต่อขอรับแพ็กเกจองค์กร
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Money Back Guarantee -->
+            <div class="mt-12 text-center max-w-xl mx-auto flex items-center justify-center gap-3 bg-slate-800/60 p-4 rounded-xl border border-slate-700">
+                <svg class="w-6 h-6 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <div class="text-xs sm:text-sm text-slate-300 font-sarabun text-left">
+                    <strong>รับประกันความพึงพอใจ:</strong> มั่นใจในคุณภาพระบบ ทดลองใช้งานได้ทันที สอบถามการใช้งานได้ตลอด
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="py-20 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-xs sm:text-sm font-bold font-prompt text-amber-600 uppercase tracking-wider bg-amber-100 px-3 py-1 rounded-full">คำถามที่พบบ่อย</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold font-prompt text-slate-900 mt-4 leading-snug">
+                    ข้อสงสัยก่อนตัดสินใจใช้งาน
+                </h2>
+                <p class="text-slate-600 mt-2 text-sm sm:text-base">
+                    รวบรวมคำถามที่ผู้รับเหมาและวิศวกรสอบถามเข้ามาบ่อยที่สุด
+                </p>
+            </div>
+
+            <div class="space-y-4" id="faqAccordion">
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-prompt font-semibold text-slate-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition" onclick="toggleFaq(1)">
+                        <span>1. ต้องติดตั้งโปรแกรมลงในคอมพิวเตอร์หรือไม่?</span>
+                        <svg id="faqIcon-1" class="w-5 h-5 text-slate-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="faqContent-1" class="px-6 pb-4 text-slate-600 text-sm font-sarabun leading-relaxed hidden">
+                        ไม่ต้องติดตั้งโปรแกรมใดๆ ทั้งสิ้นครับ ระบบทำงานบนเว็บบราวเซอร์ (Web Application) คุณสามารถเปิดใช้งานผ่าน Google Chrome, Safari หรือ Microsoft Edge บนคอมพิวเตอร์ โน้ตบุ๊ก แท็บเล็ต หรือสมาร์ทโฟนได้ทันที
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-prompt font-semibold text-slate-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition" onclick="toggleFaq(2)">
+                        <span>2. ใช้งานบนโทรศัพท์มือถือ (iOS / Android) ได้ไหม?</span>
+                        <svg id="faqIcon-2" class="w-5 h-5 text-slate-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="faqContent-2" class="px-6 pb-4 text-slate-600 text-sm font-sarabun leading-relaxed hidden">
+                        ได้ 100% ครับ ระบบได้รับการออกแบบให้เป็นแบบ Responsive ปรับขนาดหน้าจอให้พอดีกับโทรศัพท์มือถือและแท็บเล็ต คุณสามารถเปิดตรวจเช็กงวดงานหรือแก้ราคาขณะอยู่หน้างานก่อสร้างได้อย่างสะดวกสบาย
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-prompt font-semibold text-slate-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition" onclick="toggleFaq(3)">
+                        <span>3. สามารถปรับเปลี่ยนราคาวัสดุและค่าแรงตามพื้นที่ของตัวเองได้ไหม?</span>
+                        <svg id="faqIcon-3" class="w-5 h-5 text-slate-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="faqContent-3" class="px-6 pb-4 text-slate-600 text-sm font-sarabun leading-relaxed hidden">
+                        สามารถแก้ไขได้อย่างอิสระครับ ทั้งราคาค่าวัสดุต่อหน่วย ค่าแรงช่างในแต่ละพื้นที่ รวมไปถึงการกำหนด % กำไรและค่าดำเนินงาน (Overhead) เพื่อให้ได้ตัวเลขที่ตรงกับต้นทุนจริงของคุณมากที่สุด
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-prompt font-semibold text-slate-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition" onclick="toggleFaq(4)">
+                        <span>4. ระบบแบ่งงวดงานช่วยป้องกันปัญหาการเบิกเงินอย่างไร?</span>
+                        <svg id="faqIcon-4" class="w-5 h-5 text-slate-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="faqContent-4" class="px-6 pb-4 text-slate-600 text-sm font-sarabun leading-relaxed hidden">
+                        ระบบจะช่วยคำนวณสัดส่วน % ค่างวดให้สอดคล้องกับต้นทุนวัสดุและค่าแรงในแต่ละเฟสของงานจริง ทำให้ผู้รับเหมามีกระแสเงินสดหมุนเวียนเพียงพอในการสั่งของและจ่ายค่าช่างในแต่ละงวด ไม่เกิดปัญหาเงินขาดมืองวดกลางทาง
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-prompt font-semibold text-slate-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition" onclick="toggleFaq(5)">
+                        <span>5. ไม่ค่อยเก่งคอมพิวเตอร์ จะใช้เป็นไหม?</span>
+                        <svg id="faqIcon-5" class="w-5 h-5 text-slate-500 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="faqContent-5" class="px-6 pb-4 text-slate-600 text-sm font-sarabun leading-relaxed hidden">
+                        ใช้เป็นแน่นอนครับ ตัวระบบถูกสร้างขึ้นมาเพื่อแก้ปัญหาความยุ่งยากของ Excel เพียงแค่เลือกหมวดหมู่งาน กรอกขนาดพื้นที่ หรือปริมาณ ระบบจะทำการคำนวณและสรุปยอดให้อัตโนมัติทั้งหมด มีขั้นตอนแนะนำชัดเจนเป็นภาษาไทย
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CALL TO ACTION SECTION -->
+    <section class="py-20 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-slate-950 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 class="text-3xl sm:text-5xl font-extrabold font-prompt tracking-tight text-slate-950">
+                พร้อมยกระดับงานรับเหมาก่อสร้างของคุณแล้วหรือยัง?
+            </h2>
+            <p class="mt-4 text-lg sm:text-xl text-slate-900 font-sarabun max-w-2xl mx-auto">
+                เริ่มต้นใช้งานระบบคำนวณ BOQ และบริหารงวดงานวันนี้ เลิกปวดหัวกับ Excel ตีราคาแม่นยำ ได้กำไรเต็มเม็ดเต็มหน่วย
+            </p>
+
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-slate-950 hover:bg-slate-900 text-white font-prompt font-bold text-lg px-9 py-4 rounded-xl shadow-2xl transition duration-300 transform hover:-translate-y-1">
+                    <span>เปิดเข้าใช้งานโปรแกรมได้ทันที</span>
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+                <a href="#demo"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/90 hover:bg-white text-slate-900 font-prompt font-semibold text-base px-7 py-4 rounded-xl shadow-md transition duration-300">
+                    <span>ดูตัวอย่างการคำนวณอีกครั้ง</span>
+                </a>
+            </div>
+
+            <div class="mt-6 flex items-center justify-center gap-6 text-xs text-slate-900 font-prompt font-medium">
+                <span class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-slate-950" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    ใช้งานบนเว็บบราวเซอร์
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-slate-950" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    ไม่ต้องดาวน์โหลดติดตั้ง
+                </span>
+                <span class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-slate-950" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    ทดลองใช้งานได้ทันที
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 text-xs sm:text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-10">
+                <div class="md:col-span-2 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 font-bold font-prompt">
+                            BOQ
+                        </div>
+                        <div class="font-prompt font-bold text-white text-base">ระบบคำนวณราคาค่าก่อสร้าง BOQ & บริหารงวดงาน</div>
+                    </div>
+                    <p class="text-slate-400 text-xs max-w-sm leading-relaxed">
+                        แพลตฟอร์มช่วยถอดแบบ ประเมินต้นทุนค่าก่อสร้าง และวางแผนงวดงานสำหรับผู้รับเหมา วิศวกร และสถาปนิกไทย เพื่อความเป็นมืออาชีพและกำไรที่ยั่งยืน
+                    </p>
+                    <div class="pt-2 text-xs text-slate-500">
+                        แอปพลิเคชัน: <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" class="text-amber-400 underline hover:text-amber-300">kanpisek111-kpn.github.io/construction-boq-app/</a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-prompt font-bold text-white text-sm mb-3">เมนูลัด</h4>
+                    <ul class="space-y-2 text-xs font-prompt">
+                        <li><a href="#features" class="hover:text-amber-400 transition">ฟีเจอร์ของระบบ</a></li>
+                        <li><a href="#demo" class="hover:text-amber-400 transition">ทดลองคำนวณงบ</a></li>
+                        <li><a href="#pricing" class="hover:text-amber-400 transition">ตารางราคาแพ็กเกจ</a></li>
+                        <li><a href="#faq" class="hover:text-amber-400 transition">คำถามที่พบบ่อย</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-prompt font-bold text-white text-sm mb-3">ติดต่อทีมงาน & ซัพพอร์ต</h4>
+                    <ul class="space-y-2 text-xs font-sarabun">
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .04C5.38.04 0 4.67 0 10.37c0 3.26 1.76 6.18 4.54 8.07-.2 1.34-.78 3.51-1.8 4.88 0 0 2.92-.38 5.67-2.31 1.15.34 2.37.52 3.59.52 6.62 0 12-4.63 12-10.33S18.62.04 12 .04z"/></svg>
+                            <span>LINE Official: <strong class="text-white">@boqpro</strong> (แจ้งรับส่วนลด)</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>อีเมล: <span class="text-slate-300">support@boqpro.com</span></span>
+                        </li>
+                        <li class="text-slate-500 pt-1">
+                            เปิดให้บริการทุกวัน จันทร์ - อาทิตย์
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+                <div>
+                    © 2026 Construction BOQ & Milestone Platform. สงวนลิขสิทธิ์ทั้งหมด
+                </div>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-slate-400">นโยบายความเป็นส่วนตัว</a>
+                    <a href="#" class="hover:text-slate-400">ข้อกำหนดการใช้งาน</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- STICKY FLOATING CTA BAR FOR MOBILE & DESKTOP -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-3 sm:px-6 shadow-2xl">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            <div class="hidden sm:flex items-center gap-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <div>
+                    <div class="font-prompt font-bold text-white text-xs sm:text-sm">ระบบคำนวณราคาค่าก่อสร้าง BOQ</div>
+                    <div class="text-[11px] text-amber-400">เข้าทดลองใช้งานฟรีได้ทันที ไม่ต้องติดตั้งโปรแกรม</div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
+                <a href="#demo" class="hidden sm:inline-flex items-center gap-1 px-4 py-2 rounded-xl text-xs font-prompt text-slate-300 hover:text-white bg-slate-800 border border-slate-700 transition">
+                    คำนวณงบตัวอย่าง
+                </a>
+                <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-prompt font-bold text-xs sm:text-sm py-2.5 px-5 rounded-xl shadow-lg transition transform hover:scale-105">
+                    <span>เปิดแอปพลิเคชัน (คลิกที่นี่)</span>
+                    <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIVE SOCIAL PROOF NOTIFICATION POPUP (Toast) -->
+    <div id="liveProofToast" class="fixed bottom-20 left-4 z-40 bg-slate-900/95 border border-slate-700 text-white p-3.5 rounded-xl shadow-2xl backdrop-blur-md max-w-xs transition-all duration-500 transform translate-y-10 opacity-0 pointer-events-none flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-400/30 flex items-center justify-center shrink-0 text-amber-400 font-bold font-prompt text-xs">
+            ✓
+        </div>
+        <div class="text-xs font-sarabun">
+            <div class="font-prompt font-semibold text-slate-200" id="proofUser">คุณสมชาย (ผู้รับเหมา นนทบุรี)</div>
+            <div class="text-slate-400 text-[11px]" id="proofAction">เพิ่งเปิดสร้างใบเสนอราคา BOQ สำเร็จ</div>
+            <div class="text-[10px] text-amber-400/90 mt-0.5" id="proofTime">เมื่อ 2 นาทีที่แล้ว</div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Smooth scroll to Pricing
+        function scrollToPricing() {
+            const pricing = document.getElementById('pricing');
+            if (pricing) pricing.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // FAQ Toggle
+        function toggleFaq(id) {
+            const content = document.getElementById(`faqContent-${id}`);
+            const icon = document.getElementById(`faqIcon-${id}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // Demo Interactive Calculator
+        let currentGrade = 'standard';
+        const gradeRates = {
+            economy: 12000,
+            standard: 15500,
+            premium: 20000
+        };
+
+        function setGrade(grade) {
+            currentGrade = grade;
+            const grades = ['economy', 'standard', 'premium'];
+            grades.forEach(g => {
+                const btn = document.getElementById(`btnGrade${g.charAt(0).toUpperCase() + g.slice(1)}`);
+                if (g === grade) {
+                    btn.className = "py-2.5 px-3 rounded-xl border-2 border-amber-500 bg-amber-500/20 text-xs font-prompt text-amber-300 transition text-center font-bold";
+                } else {
+                    btn.className = "py-2.5 px-3 rounded-xl border border-slate-600 bg-slate-700/60 text-xs font-prompt text-slate-300 hover:border-amber-400 transition text-center";
+                }
+            });
+            calculateDemoEstimate();
+        }
+
+        function calculateDemoEstimate() {
+            const area = parseInt(document.getElementById('areaSlider').value);
+            const marginPercent = parseInt(document.getElementById('marginSlider').value);
+            
+            document.getElementById('areaValueDisplay').innerText = `${area.toLocaleString()} ตร.ม.`;
+            document.getElementById('marginDisplay').innerText = `${marginPercent}%`;
+
+            const baseRate = gradeRates[currentGrade];
+            const baseCost = area * baseRate;
+            const profit = Math.round(baseCost * (marginPercent / 100));
+            const total = baseCost + profit;
+
+            document.getElementById('demoTotalCost').innerText = `฿${total.toLocaleString()}`;
+            document.getElementById('demoProfitAmount').innerText = `฿${profit.toLocaleString()}`;
+
+            // Milestones breakdown: 15%, 25%, 25%, 25%, 10%
+            const m1 = Math.round(total * 0.15);
+            const m2 = Math.round(total * 0.25);
+            const m3 = Math.round(total * 0.25);
+            const m4 = Math.round(total * 0.25);
+            const m5 = total - (m1 + m2 + m3 + m4);
+
+            document.getElementById('m1').innerText = `฿${m1.toLocaleString()}`;
+            document.getElementById('m2').innerText = `฿${m2.toLocaleString()}`;
+            document.getElementById('m3').innerText = `฿${m3.toLocaleString()}`;
+            document.getElementById('m4').innerText = `฿${m4.toLocaleString()}`;
+            document.getElementById('m5').innerText = `฿${m5.toLocaleString()}`;
+        }
+
+        // Realtime Countdown Timer Simulation
+        let countdownSeconds = (3 * 24 * 3600) + (8 * 3600) + (45 * 60);
+        function updateCountdown() {
+            if (countdownSeconds > 0) {
+                countdownSeconds--;
+                const days = Math.floor(countdownSeconds / (24 * 3600));
+                const hours = Math.floor((countdownSeconds % (24 * 3600)) / 3600);
+                const minutes = Math.floor((countdownSeconds % 3600) / 60);
+                const seconds = countdownSeconds % 60;
+                const display = `${String(days).padStart(2, '0')} วัน ${String(hours).padStart(2, '0')} ชม. ${String(minutes).padStart(2, '0')} นาที ${String(seconds).padStart(2, '0')} วินาที`;
+                const el = document.getElementById('countdownTimer');
+                if (el) el.innerText = display;
+            }
+        }
+        setInterval(updateCountdown, 1000);
+
+        // Social Proof Notifications Simulation
+        const mockProofs = [
+            { user: "คุณสมชาย (ผู้รับเหมา นนทบุรี)", action: "เพิ่งออกใบเสนอราคา BOQ สำเร็จ", time: "เมื่อ 2 นาทีที่แล้ว" },
+            { user: "วิศวกรวีระ (บจก. เคพี คอนสตรัคชั่น)", action: "เพิ่งแบ่งงวดงานโครงการ 4.2 ล้านบาท", time: "เมื่อ 5 นาทีที่แล้ว" },
+            { user: "ช่างวิชัย (งานสร้างบ้าน เชียงใหม่)", action: "เพิ่งสมัครสมาชิกแพ็กเกจ Pro ตลอดชีพ", time: "เมื่อ 8 นาทีที่แล้ว" },
+            { user: "คุณปิยะพร (สถาปนิก ขอนแก่น)", action: "กำลังเปิดใช้งานระบบคำนวณ BOQ", time: "เมื่อ 11 นาทีที่แล้ว" },
+            { user: "ช่างเอก (งานรีโนเวท กรุงเทพฯ)", action: "ส่งออกรายงานสรุปต้นทุนวัสดุ", time: "เมื่อไม่กี่วินาทีที่แล้ว" }
+        ];
+        let proofIdx = 0;
+
+        function showSocialProof() {
+            const toast = document.getElementById('liveProofToast');
+            if (!toast) return;
+
+            const item = mockProofs[proofIdx];
+            document.getElementById('proofUser').innerText = item.user;
+            document.getElementById('proofAction').innerText = item.action;
+            document.getElementById('proofTime').innerText = item.time;
+
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            }, 5500);
+
+            proofIdx = (proofIdx + 1) % mockProofs.length;
+        }
+
+        // Trigger social proof after 4 seconds, then repeat every 18 seconds
+        setTimeout(() => {
+            showSocialProof();
+            setInterval(showSocialProof, 18000);
+        }, 4000);
+
+        // Run initial calculation
+        calculateDemoEstimate();
+    </script>
+</body>
+</html>
