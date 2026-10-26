@@ -99,8 +99,8 @@
     <div class="bg-gradient-to-r from-amber-600 via-brand-600 to-amber-700 text-white text-xs sm:text-sm py-2 px-4 font-prompt text-center font-medium shadow-sm relative z-50">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-amber-900/60 text-amber-200 border border-amber-400/40">🔥 โปรเปิดตัวพิเศษ</span>
-            <span>ลดพิเศษ 50% สำหรับผู้รับเหมาและวิศวกร 50 ท่านแรกประจำเดือนนี้</span>
-            <span class="font-bold underline cursor-pointer hover:text-amber-100 transition" onclick="scrollToPricing()">ดูราคา & สมัครเลย &rarr;</span>
+            <span>ลด 70% เหลือเพียง ฿790 ตลอดชีพ (พร้อมรับฟรี 4 โบนัสสัญญาและคู่มือก่อสร้าง)</span>
+            <span class="font-bold underline cursor-pointer hover:text-amber-100 transition" onclick="scrollToPricing()">ดูราคา & สั่งซื้อรับรหัส &rarr;</span>
         </div>
     </div>
 
@@ -801,6 +801,19 @@
         <div class="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- ROI Callout Card -->
+            <div class="max-w-4xl mx-auto mb-16 bg-gradient-to-r from-amber-950/60 via-slate-800 to-amber-950/60 border border-amber-500/40 rounded-2xl p-6 sm:p-8 shadow-xl text-center">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-prompt font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30 mb-3">
+                    💡 เปรียบเทียบความคุ้มค่าที่ไม่มีวันขาดทุน
+                </span>
+                <h3 class="text-xl sm:text-2xl font-bold font-prompt text-white">
+                    งานสร้างบ้าน 1 หลัง หากตีราคาพลาดเพียง 1 จุด... คุณอาจขาดทุน <span class="text-red-400">50,000 - 200,000+ บาท</span>
+                </h3>
+                <p class="text-sm sm:text-base text-slate-300 font-sarabun mt-2 max-w-2xl mx-auto">
+                    แต่การลงทุนใช้ระบบนี้เริ่มต้นเพียง <span class="text-amber-400 font-bold font-prompt text-lg">฿790</span> จ่ายครั้งเดียวใช้ได้ตลอดชีพ ช่วยปกป้องกำไรทุกตารางเมตร แค่รับงานแรกงานเดียวก็คืนทุนเกิน 100 เท่า!
+                </p>
+            </div>
+
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <!-- Countdown Banner -->
                 <div class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/30 px-4 py-1.5 rounded-full text-amber-300 text-xs sm:text-sm font-prompt mb-4">
@@ -812,7 +825,7 @@
                     ลงทุนหลักร้อย ปกป้องกำไรหลักล้าน
                 </h2>
                 <p class="text-slate-300 mt-3 text-base sm:text-lg">
-                    เลือกแพ็กเกจที่เหมาะกับคุณ ใช้งานได้เต็มรูปแบบ ไม่มีเงื่อนไขซ่อนเร้น
+                    ราคาโปรโมชั่นเปิดตัวพิเศษสำหรับ 50 สิทธิ์แรกของเดือนนี้ (สิทธิ์มีจำนวนจำกัด)
                 </p>
             </div>
 
@@ -820,80 +833,110 @@
                 <!-- Plan 1: Free Trial / Starter -->
                 <div class="bg-slate-800/90 rounded-2xl p-8 border border-slate-700 flex flex-col justify-between">
                     <div>
-                        <div class="font-prompt font-bold text-lg text-slate-300">ทดลองใช้งานฟรี</div>
-                        <div class="text-xs text-slate-400 mt-1">เหมาะสำหรับทดสอบระบบและผู้เริ่มต้น</div>
+                        <div class="font-prompt font-bold text-lg text-slate-300">ทดลองใช้งานฟรี (Demo)</div>
+                        <div class="text-xs text-slate-400 mt-1">เหมาะสำหรับทดสอบระบบและดูตัวอย่างการทำงาน</div>
                         <div class="my-6">
                             <span class="text-4xl font-extrabold font-prompt text-white">฿0</span>
-                            <span class="text-slate-400 text-sm"> / ทดลองใช้</span>
+                            <span class="text-slate-400 text-sm"> / ตลอดไป</span>
                         </div>
                         <ul class="space-y-3 text-sm font-sarabun text-slate-300">
                             <li class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                <span>เข้าใช้งานคำนวณ BOQ ออนไลน์</span>
+                                <span>เข้าชมหน้า Dashboard สรุปโครงการ</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                <span>คำนวณงวดงานมาตรฐาน 5 งวด</span>
+                                <span>ทดลองระบบสร้าง BOQ ด่วน 3 นาที</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
                                 <span>เปิดใช้งานได้ทั้งมือถือและคอมพิวเตอร์</span>
+                            </li>
+                            <li class="flex items-center gap-2 text-slate-500">
+                                <span>🔒 ล็อคระบบออกใบเสนอราคา PDF & Excel</span>
+                            </li>
+                            <li class="flex items-center gap-2 text-slate-500">
+                                <span>🔒 ล็อคเครื่องคิดเลขเจาะลึก 11 หมวดงาน</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mt-8">
                         <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank"
                            class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl border border-slate-600 bg-slate-700/80 hover:bg-slate-700 text-white font-prompt font-semibold text-sm transition">
-                            เริ่มใช้งานฟรีทันที
+                            เข้าทดลองใช้เดโม่ฟรี
                         </a>
                     </div>
                 </div>
 
                 <!-- Plan 2: Pro Lifetime (Best Value Highlight) -->
-                <div class="bg-gradient-to-b from-amber-950/60 via-slate-800 to-slate-800 rounded-2xl p-8 border-2 border-amber-500 relative shadow-glow flex flex-col justify-between transform lg:-translate-y-2">
+                <div class="bg-gradient-to-b from-amber-950/80 via-slate-800 to-slate-800 rounded-2xl p-8 border-2 border-amber-500 relative shadow-glow flex flex-col justify-between transform lg:-translate-y-2">
                     <!-- Popular Badge -->
-                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-prompt font-bold text-xs uppercase px-4 py-1.5 rounded-full shadow-md">
-                        🔥 แนะนำยอดนิยม • จ่ายครั้งเดียวจบ
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-prompt font-black text-xs uppercase px-4 py-1.5 rounded-full shadow-lg">
+                        🔥 คุ้มค่าที่สุด • ลด 70% เหลือเพียง 7 สิทธิ์
                     </div>
 
                     <div>
-                        <div class="font-prompt font-bold text-xl text-amber-400">Pro Lifetime (ตลอดชีพ)</div>
-                        <div class="text-xs text-amber-200/80 mt-1">ปลดล็อกฟังก์ชันเต็มรูปแบบ ไม่ต้องจ่ายรายเดือน</div>
+                        <div class="font-prompt font-bold text-2xl text-amber-400">Pro Lifetime (ตลอดชีพ)</div>
+                        <div class="text-xs text-amber-200/90 mt-1">ปลดล็อกทุกฟังก์ชันเต็มระบบ • จ่ายครั้งเดียวจบ ไม่มีรายเดือน</div>
                         <div class="my-6">
-                            <span class="text-sm line-through text-slate-400">ปกติ 2,990.-</span>
+                            <span class="text-sm line-through text-slate-400">ราคาปกติ 2,990.-</span>
                             <div class="flex items-baseline gap-2">
-                                <span class="text-4xl sm:text-5xl font-extrabold font-prompt text-white">฿990</span>
-                                <span class="text-amber-400 text-sm font-prompt">จ่ายครั้งเดียวใช้ได้ตลอดชีพ</span>
+                                <span class="text-5xl font-extrabold font-prompt text-white">฿790</span>
+                                <span class="text-amber-400 text-sm font-prompt font-bold">จ่ายครั้งเดียวใช้ได้ตลอดชีพ</span>
                             </div>
                         </div>
-                        <ul class="space-y-3.5 text-sm font-sarabun text-slate-200">
+
+                        <!-- 4 Free Bonuses -->
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 mb-5 space-y-1.5 text-xs font-sarabun text-amber-200">
+                            <div class="font-prompt font-bold text-amber-300 flex items-center gap-1 text-[11px] uppercase tracking-wide">
+                                <span>🎁 พิเศษ! รับฟรีทันที 4 โบนัส (มูลค่า 4,500.-):</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-amber-400 font-bold">1.</span>
+                                <span>เทมเพลตสัญญาจ้างเหมาก่อสร้างมาตรฐาน (มูลค่า 1,500.-)</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-amber-400 font-bold">2.</span>
+                                <span>ตารางราคากลางวัสดุ & ค่าแรงมาตรฐาน 2026 (มูลค่า 990.-)</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-amber-400 font-bold">3.</span>
+                                <span>วิดีโอคู่มือสอนเทคนิคถอดแบบไม่ให้ขาดทุน (มูลค่า 1,200.-)</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-amber-400 font-bold">4.</span>
+                                <span>เข้ากลุ่ม VIP ปรึกษาและอัปเดตฟังก์ชันฟรีตลอดชีพ (มูลค่า 890.-)</span>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-2.5 text-sm font-sarabun text-slate-200">
                             <li class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <span class="font-semibold text-white">ใช้งานฟังก์ชันคำนวณ BOQ ไม่จำกัดโครงการ</span>
+                                <span class="font-semibold text-white">ปลดล็อกการออกใบเสนอราคา Quotation & พิมพ์ PDF</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <span>ปรับแต่งฐานราคาวัสดุ & ค่าแรงได้เอง</span>
+                                <span class="font-semibold text-white">ปลดล็อก Export ไฟล์ Excel (.xlsx) และ CSV ไม่จำกัด</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <span>ระบบออกเอกสารใบเสนอราคา (Quotation/PDF)</span>
+                                <span>ปลดล็อกเครื่องคิดเลขเจาะลึกครบทั้ง 11 หมวดงาน</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <span>อัปเดตฟีเจอร์ใหม่ฟรีตลอดอายุการใช้งาน</span>
+                                <span>ระบบบริหารและแบ่งงวดงาน 5-10 งวด</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                <span>บริการช่วยเหลือให้คำปรึกษาการใช้งาน</span>
+                                <span>สร้างและบันทึกโครงการได้ไม่จำกัด</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mt-8">
-                        <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank"
-                           class="w-full inline-flex items-center justify-center py-4 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-prompt font-bold text-base transition shadow-lg shadow-amber-500/30">
-                            สั่งซื้อสิทธิ์ Pro & เข้าใช้งานทันที
-                        </a>
+                        <button type="button" onclick="openOrderModal('pro', '฿790')"
+                                class="w-full inline-flex items-center justify-center py-4 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-prompt font-extrabold text-base transition shadow-lg shadow-amber-500/40 transform hover:scale-[1.02] active:scale-95">
+                            ⚡ สั่งซื้อสิทธิ์ Pro รับโบนัสทันที (฿790) &rarr;
+                        </button>
                     </div>
                 </div>
 
@@ -901,38 +944,38 @@
                 <div class="bg-slate-800/90 rounded-2xl p-8 border border-slate-700 flex flex-col justify-between">
                     <div>
                         <div class="font-prompt font-bold text-lg text-slate-300">ทีม & องค์กร (Enterprise)</div>
-                        <div class="text-xs text-slate-400 mt-1">สำหรับบริษัทรับเหมาขนาดกลางและใหญ่</div>
+                        <div class="text-xs text-slate-400 mt-1">สำหรับบริษัทรับเหมาขนาดกลาง-ใหญ่ ที่ต้องการระบบเต็มรูปแบบ</div>
                         <div class="my-6">
                             <span class="text-sm line-through text-slate-400">ปกติ 5,900.-</span>
                             <div class="flex items-baseline gap-2">
-                                <span class="text-4xl font-extrabold font-prompt text-white">฿2,490</span>
-                                <span class="text-slate-400 text-sm"> / ตลอดชีพ</span>
+                                <span class="text-4xl font-extrabold font-prompt text-white">฿1,990</span>
+                                <span class="text-slate-400 text-sm font-prompt"> / ตลอดชีพ</span>
                             </div>
                         </div>
                         <ul class="space-y-3 text-sm font-sarabun text-slate-300">
                             <li class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                <span>รวมทุกอย่างในแพ็กเกจ Pro</span>
+                                <span>รวมทุกอย่างในแพ็กเกจ Pro ทั้งหมด</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                <span>ใส่โลโก้และข้อมูลบริษัทบนหัวเอกสาร</span>
+                                <span>ปลดล็อก AI สแกนแปลนบ้าน & AI ตรวจ BOQ</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                <span>รองรับการใช้งานหลายบัญชีในทีม</span>
+                                <span>ปลดล็อกระบบ Gantt Chart & คุมต้นทุนจริง</span>
                             </li>
                             <li class="flex items-center gap-2">
                                 <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                                <span>Support พิเศษแบบ Priority ส่วนตัว</span>
+                                <span>บริการ Support พิเศษแบบ Priority ส่วนตัว</span>
                             </li>
                         </ul>
                     </div>
                     <div class="mt-8">
-                        <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank"
-                           class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl border border-slate-600 bg-slate-700/80 hover:bg-slate-700 text-white font-prompt font-semibold text-sm transition">
-                            ติดต่อขอรับแพ็กเกจองค์กร
-                        </a>
+                        <button type="button" onclick="openOrderModal('enterprise', '฿1,990')"
+                                class="w-full inline-flex items-center justify-center py-3.5 px-4 rounded-xl border border-slate-600 bg-slate-700/80 hover:bg-slate-700 text-white font-prompt font-semibold text-sm transition">
+                            สั่งซื้อแพ็กเกจ Enterprise (฿1,990)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1030,16 +1073,16 @@
             </p>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer"
-                   class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-slate-950 hover:bg-slate-900 text-white font-prompt font-bold text-lg px-9 py-4 rounded-xl shadow-2xl transition duration-300 transform hover:-translate-y-1">
-                    <span>เปิดเข้าใช้งานโปรแกรมได้ทันที</span>
+                <button type="button" onclick="openOrderModal('pro', '฿790')"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-slate-950 hover:bg-slate-900 text-white font-prompt font-extrabold text-lg px-9 py-4 rounded-xl shadow-2xl transition duration-300 transform hover:-translate-y-1">
+                    <span>⚡ สั่งซื้อสิทธิ์ Pro ตลอดชีพ (฿790) รับโบนัสทันที</span>
                     <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>
-                </a>
-                <a href="#demo"
+                </button>
+                <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer"
                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/90 hover:bg-white text-slate-900 font-prompt font-semibold text-base px-7 py-4 rounded-xl shadow-md transition duration-300">
-                    <span>ดูตัวอย่างการคำนวณอีกครั้ง</span>
+                    <span>เข้าทดลองใช้เดโม่ฟรี</span>
                 </a>
             </div>
 
@@ -1131,14 +1174,14 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
-                <a href="#demo" class="hidden sm:inline-flex items-center gap-1 px-4 py-2 rounded-xl text-xs font-prompt text-slate-300 hover:text-white bg-slate-800 border border-slate-700 transition">
-                    คำนวณงบตัวอย่าง
+                <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" class="hidden sm:inline-flex items-center gap-1 px-4 py-2.5 rounded-xl text-xs font-prompt text-slate-300 hover:text-white bg-slate-800 border border-slate-700 transition">
+                    ทดลองใช้เดโม่ฟรี
                 </a>
-                <a href="https://kanpisek111-kpn.github.io/construction-boq-app/" target="_blank" rel="noopener noreferrer"
-                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-prompt font-bold text-xs sm:text-sm py-2.5 px-5 rounded-xl shadow-lg transition transform hover:scale-105">
-                    <span>เปิดแอปพลิเคชัน (คลิกที่นี่)</span>
-                    <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                </a>
+                <button type="button" onclick="openOrderModal('pro', '฿790')"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-prompt font-extrabold text-xs sm:text-sm py-2.5 px-5 rounded-xl shadow-lg transition transform hover:scale-105">
+                    <span>⚡ สั่งซื้อสิทธิ์ Pro ฿790 (รับโบนัสทันที)</span>
+                    <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
             </div>
         </div>
     </div>
@@ -1155,8 +1198,122 @@
         </div>
     </div>
 
+    <!-- FLOATING LINE CHAT BUTTON -->
+    <a href="https://line.me/R/ti/p/@boqpro" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-40 bg-[#06C755] hover:bg-[#05b34c] text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl flex items-center gap-2.5 transition transform hover:scale-105 group border-2 border-white/20 animate-bounce duration-1000">
+        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+            <path d="M12 .04C5.38.04 0 4.67 0 10.37c0 3.26 1.76 6.18 4.54 8.07-.2 1.34-.78 3.51-1.8 4.88 0 0 2.92-.38 5.67-2.31 1.15.34 2.37.52 3.59.52 6.62 0 12-4.63 12-10.33S18.62.04 12 .04z"/>
+        </svg>
+        <span class="font-prompt font-bold text-xs sm:text-sm hidden sm:inline">สั่งซื้อ / ปรึกษาทาง LINE</span>
+        <span class="w-2.5 h-2.5 rounded-full bg-white animate-ping hidden sm:inline"></span>
+    </a>
+
+    <!-- DIRECT CHECKOUT / ORDER MODAL -->
+    <div id="orderModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 overflow-y-auto hidden">
+        <div class="relative w-full max-w-lg bg-slate-900 border border-amber-500/50 rounded-2xl p-6 sm:p-8 text-slate-100 shadow-2xl">
+            <button onclick="closeOrderModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                ✕
+            </button>
+
+            <div class="text-center mb-6">
+                <span class="px-3 py-1 rounded-full text-xs font-prompt font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                    ขั้นตอนการสั่งซื้อสิทธิ์การใช้งาน
+                </span>
+                <h3 class="text-xl sm:text-2xl font-bold font-prompt text-white mt-2" id="orderModalTitle">
+                    สั่งซื้อแพ็กเกจ Pro ตลอดชีพ
+                </h3>
+                <div class="flex items-baseline justify-center gap-2 mt-2">
+                    <span class="text-3xl sm:text-4xl font-extrabold font-prompt text-amber-400" id="orderModalPrice">฿790</span>
+                    <span class="text-xs text-slate-400 font-prompt">จ่ายครั้งเดียวใช้ได้ตลอดชีพ</span>
+                </div>
+            </div>
+
+            <!-- Free Bonuses Reminder in Modal -->
+            <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 mb-6 text-xs font-sarabun text-amber-200 space-y-1">
+                <div class="font-prompt font-bold text-amber-300 flex items-center gap-1">
+                    <span>🎁 สิ่งที่คุณจะได้รับทันที:</span>
+                </div>
+                <div>• รหัส License Key ปลดล็อกระบบเต็มรูปแบบ</div>
+                <div>• เทมเพลตสัญญาจ้างเหมาก่อสร้างมาตรฐาน (มูลค่า 1,500.-)</div>
+                <div>• บัญชีราคากลางวัสดุและค่าแรงมาตรฐาน 2026 (มูลค่า 990.-)</div>
+                <div>• วิดีโอสอนเทคนิคทำ BOQ ไม่ให้ขาดทุน & สิทธิ์อัปเดตฟรีตลอดชีพ</div>
+            </div>
+
+            <!-- Payment Steps -->
+            <div class="space-y-4 bg-slate-800/80 p-5 rounded-2xl border border-slate-700">
+                <div class="text-xs font-prompt font-bold text-slate-200 flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-xs">1</span>
+                    <span>โอนเงินชำระค่าสิทธิ์ตามยอดด้านบน:</span>
+                </div>
+
+                <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-700 space-y-2 text-xs font-sarabun">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400">ช่องทางโอนเงิน:</span>
+                        <span class="font-prompt font-semibold text-white">พร้อมเพย์ (PromptPay) / บัญชีธนาคาร</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400">เบอร์พร้อมเพย์:</span>
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono font-bold text-amber-400 text-sm" id="bankAccountNum">081-xxx-xxxx</span>
+                            <button onclick="copyBankNumber()" class="text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 hover:text-white border border-slate-600">
+                                คัดลอก
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center text-[11px] text-slate-400">
+                        <span>ชื่อบัญชี:</span>
+                        <span class="text-white">ระบบ Construction BOQ & Milestone Platform</span>
+                    </div>
+                </div>
+
+                <div class="text-xs font-prompt font-bold text-slate-200 flex items-center gap-2 pt-1">
+                    <span class="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-xs">2</span>
+                    <span>ส่งสลิปโอนเงินเพื่อรับ License Key ทันที:</span>
+                </div>
+
+                <a href="https://line.me/R/ti/p/@boqpro" target="_blank" rel="noopener noreferrer"
+                   class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-[#06C755] hover:bg-[#05b34c] text-white font-prompt font-bold text-sm shadow-lg transition transform active:scale-95">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 .04C5.38.04 0 4.67 0 10.37c0 3.26 1.76 6.18 4.54 8.07-.2 1.34-.78 3.51-1.8 4.88 0 0 2.92-.38 5.67-2.31 1.15.34 2.37.52 3.59.52 6.62 0 12-4.63 12-10.33S18.62.04 12 .04z"/></svg>
+                    <span>📲 ส่งสลิปผ่าน LINE: @boqpro เพื่อรับรหัสทันที</span>
+                </a>
+            </div>
+
+            <div class="mt-4 text-center text-[11px] text-slate-400 font-sarabun">
+                🛡️ ทีมงานจัดส่ง License Key ให้ภายใน 3 - 5 นาทีหลังจากแจ้งสลิปใน LINE ครับ
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // Order Modal Functions
+        function openOrderModal(tier, price) {
+            const modal = document.getElementById('orderModal');
+            const titleEl = document.getElementById('orderModalTitle');
+            const priceEl = document.getElementById('orderModalPrice');
+            if (modal) {
+                if (tier === 'enterprise') {
+                    titleEl.innerText = 'สั่งซื้อแพ็กเกจ Enterprise ตลอดชีพ';
+                    priceEl.innerText = price || '฿1,990';
+                } else {
+                    titleEl.innerText = 'สั่งซื้อแพ็กเกจ Pro ตลอดชีพ (ลด 70%)';
+                    priceEl.innerText = price || '฿790';
+                }
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeOrderModal() {
+            const modal = document.getElementById('orderModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function copyBankNumber() {
+            const num = document.getElementById('bankAccountNum').innerText;
+            navigator.clipboard.writeText(num);
+            alert('คัดลอกเบอร์พร้อมเพย์เรียบร้อยแล้ว: ' + num);
+        }
+
         // Smooth scroll to Pricing
         function scrollToPricing() {
             const pricing = document.getElementById('pricing');
